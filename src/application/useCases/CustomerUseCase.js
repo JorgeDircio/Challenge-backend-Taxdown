@@ -10,6 +10,7 @@ class CustomerUseCase {
       const customer = await this.customerRepository.getCustomer(req.params.customerId);
       res.json(customer);
     } catch (error) {
+      console.log('error ', error);
       res.status(404).json({ error: error.message });
     }
   }
@@ -43,6 +44,7 @@ class CustomerUseCase {
       await this.customerRepository.updateCustomer(customer);
       res.json(customer);
     } catch (error) {
+      console.log('error ', error);
       res.status(500).json({ error: "Could not update customer" });
     }
   }
@@ -50,20 +52,36 @@ class CustomerUseCase {
   async deleteCustomer(req, res) {
     try {
       await this.customerRepository.deleteCustomer(req.params.customerId);
-      res.status(204).end();
+      res.status(204).json({ message: "customer deleted successfully"})
     } catch (error) {
+      console.log('error ', error);
       res.status(500).json({ error: "Could not delete customer" });
     }
   }
 
   async listCustomers(req, res) {
+    const { order } = req.query;
+  
     try {
       const customers = await this.customerRepository.listCustomers();
-      res.json(customers);
+      const sortedCustomers = this.sortCustomers(customers, order);
+      res.json(sortedCustomers);
     } catch (error) {
+      console.error('Error fetching customers:', error);
       res.status(500).json({ error: "Could not list customers" });
     }
   }
+  
+  sortCustomers(customers, order) {
+    if (order === 'asc') {
+      return customers.sort((a, b) =>b.credit - a.credit);
+    } else if (order === 'desc') {
+      return customers.sort((a, b) => a.credit - b.credit);
+    } else {
+      return customers;
+    }
+  }
+  
 }
 
 module.exports = CustomerUseCase;

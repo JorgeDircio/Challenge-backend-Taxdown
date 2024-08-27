@@ -47,6 +47,8 @@ class CustomerRepositoryDynamoDB {
   }
 
   async delete(customerId) {
+    console.log('customer ID ', customerId);
+    console.log('this.tableName', this.tableName);
     const params = {
       TableName: this.tableName,
       Key: { customerId },

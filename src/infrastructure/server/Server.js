@@ -26,10 +26,10 @@ class Server {
     const customerRepository = new CustomerRepository(customerRepositoryDynamo);
     const customerUseCase = new CustomerUseCase(customerRepository);
 
-    this.app.get("/customers/:id", (req, res) => customerUseCase.getCustomer(req, res));
+    this.app.get("/customers/:customerId", (req, res) => customerUseCase.getCustomer(req, res));
     this.app.post("/customers", (req, res) => customerUseCase.createCustomer(req, res));
-    this.app.put("/customers", (req, res) => customerUseCase.updateCustomer(req, res));
-    this.app.delete("/customers/:id", (req, res) => customerUseCase.deleteCustomer(req, res));
+    this.app.patch("/customers", (req, res) => customerUseCase.updateCustomer(req, res));
+    this.app.delete("/customers/:customerId", (req, res) => customerUseCase.deleteCustomer(req, res));
     this.app.get("/customers", (req, res) => customerUseCase.listCustomers(req, res));
   }
 
